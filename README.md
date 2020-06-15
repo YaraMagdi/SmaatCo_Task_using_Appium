@@ -8,5 +8,5 @@
 * TestNG
 
 ## Task Requirements : 
-Perform Post An Add For OLX Arabia Mobile Application
+Perform "Place An Ad" For OLX Arabia Mobile Application
 
