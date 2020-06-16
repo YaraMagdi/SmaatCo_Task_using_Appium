@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.net.MalformedURLException;
@@ -31,6 +33,7 @@ public class OLXTest {
     private static By OwnerName = By.xpath("//android.widget.EditText[@text='Name']");
     private static By OwnerEmail = By.xpath("//android.widget.EditText[@text='E-mail']");
 
+    @BeforeClass
     public AndroidDriver<AndroidElement> startApp() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("automationName", "UiAutomator2");
@@ -50,6 +53,7 @@ public class OLXTest {
         return driver;
     }
 
+    @AfterClass
     public void tearDown(){
         driver.quit();
     }
@@ -62,8 +66,7 @@ public class OLXTest {
     }
 
     @Test
-    public void createNewAd() throws MalformedURLException {
-        AndroidDriver<AndroidElement> driver = startApp();
+    public void createNewAd() {
 
         // Click on "Place an Ad" button
         waitForElement(PlaceAnAd);
@@ -106,7 +109,7 @@ public class OLXTest {
         driver.findElement(SelectForAdLocation).click();
 
         // scroll down
-        AndroidElement element = driver.findElementByAndroidUIAutomator("new UiScrollable("
+        AndroidElement element = (AndroidElement) driver.findElementByAndroidUIAutomator("new UiScrollable("
                 + "new UiSelector().scrollable(true)).scrollIntoView("
                 + "new UiSelector().textContains(\"Name\"));");
         element.click();
@@ -118,8 +121,5 @@ public class OLXTest {
         // enter Owner email
         waitForElement(OwnerEmail);
         driver.findElement(OwnerEmail).sendKeys("yaramagdi95@gmail.com");
-
-        // Quit the driver
-        tearDown();
     }
 }
