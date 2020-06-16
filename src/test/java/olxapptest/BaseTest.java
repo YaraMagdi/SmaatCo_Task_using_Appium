@@ -44,6 +44,6 @@ public class BaseTest {
     @BeforeMethod
     public void loginToOLX(){
         loginPage = new LoginPage(driver);
-        homePage = loginPage.LoginToOLX("01012860754","YoRa7M10");
+        homePage = loginPage.LoginToOLX("","");
     }
 }
