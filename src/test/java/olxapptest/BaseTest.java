@@ -2,11 +2,9 @@ package olxapptest;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import olxpages.HomePage;
+import olxpages.LoginPage;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -17,9 +15,11 @@ import java.net.URL;
 public class BaseTest {
 
     public AndroidDriver driver;
+    private LoginPage loginPage;
+    private HomePage homePage;
 
     @BeforeClass
-    public AndroidDriver<AndroidElement> startApp() throws MalformedURLException {
+    public void startApp() throws MalformedURLException {
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("automationName", "UiAutomator2");
         capabilities.setCapability("platformName", "Android");
@@ -34,8 +34,6 @@ public class BaseTest {
 
         // will run them on appium server
         driver = new AndroidDriver<AndroidElement>(new URL("http://localhost:4723/wd/hub"), capabilities);
-
-        return driver;
     }
 
     @AfterClass
@@ -43,10 +41,9 @@ public class BaseTest {
         driver.quit();
     }
 
-    public WebElement waitForElement(By selector) {
-        WebDriverWait wait = new WebDriverWait(driver, 60);
-        WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(selector));
-        try { Thread.sleep(750); } catch (InterruptedException ign) {}
-        return element;
+    @BeforeMethod
+    public void loginToOLX(){
+        loginPage = new LoginPage(driver);
+        homePage = loginPage.LoginToOLX("01012860754","YoRa7M10");
     }
 }

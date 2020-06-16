@@ -1,91 +1,56 @@
 package olxapptest;
 
-import io.appium.java_client.android.AndroidElement;
-import org.openqa.selenium.By;
+import olxpages.BasePage;
+import olxpages.HomePage;
+import olxpages.PlaceAnAddPage;
 import org.testng.annotations.Test;
 
 public class OLXPlaceAnAdTest extends BaseTest {
 
-    private static By PlaceAnAd= By.id("com.olxmena.horizontal:id/postAdButton2");
-    private static By DenyPermissions = By.id("com.android.permissioncontroller:id/permission_deny_button");
-    private static By MobilePhonesCategories = By.xpath("//android.widget.LinearLayout[@index=2]");
-    private static By MobilePhone = By.xpath("//android.widget.LinearLayout[@index=2]");
-    private static By AdTitle = By.xpath("//android.widget.EditText[@text='Title']");
-    private static By AdPrice = By.xpath("//android.widget.Button[@text='Price (EGP)']");
-    private static By ChoosePrice = By.xpath("//android.widget.CheckedTextView[@text='Free']");
-    private static By SubmitPrice = By.xpath("//android.widget.TextView[@text='OK']");
-    private static By SelectType = By.xpath("//android.widget.Spinner[@index=0][1]");
-    private static By AdType = By.xpath("//android.widget.CheckedTextView[@index=1]");
-    private static By AdDescription = By.xpath("//android.widget.EditText[@text='Description']");
-    private static By AdLocation = By.xpath("//android.widget.Button[@text='Ad Location']");
-    private static By SearchForAdLocation = By.id("com.olxmena.horizontal:id/search_src_text");
-    private static By SelectForAdLocation = By.xpath("//android.widget.LinearLayout[@index=1]");
-    private static By OwnerName = By.xpath("//android.widget.EditText[@text='Name']");
-    private static By OwnerEmail = By.xpath("//android.widget.EditText[@text='E-mail']");
+    private PlaceAnAddPage placeAnAdPage;
+    private HomePage homePage;
+    private BasePage basePage;
 
     @Test
     public void createNewAd() {
 
+        homePage = new HomePage(driver);
         // Click on "Place an Ad" button
-        waitForElement(PlaceAnAd);
-        driver.findElement(PlaceAnAd).click();
+        homePage.denyPermissions();
+        homePage.placeAnAd();
 
+        placeAnAdPage = new PlaceAnAddPage(driver);
         // Deny first Permission
-        waitForElement(DenyPermissions);
-        driver.findElement(DenyPermissions).click();
+        placeAnAdPage.denyPermissions();
 
         // Deny second Permission
-        waitForElement(DenyPermissions);
-        driver.findElement(DenyPermissions).click();
+        placeAnAdPage.denyPermissions();
 
         // Select "Mobile Phones" from Main categories
-        waitForElement(MobilePhonesCategories);
-        driver.findElement(MobilePhonesCategories).click();
-        // select mobile
-        waitForElement(MobilePhone);
-        driver.findElement(MobilePhone).click();
+        placeAnAdPage.selectMainCategory(2);
+
+        // select mobile accessories
+        placeAnAdPage.selectSubCategory(2);
 
         // enter a title
-        driver.findElement(AdTitle).sendKeys("Mobile Covers for free");
+        placeAnAdPage.enterAdTitle("Mobile Covers for free");
 
         //enter a price
-        waitForElement(AdPrice);
-        driver.findElement(AdPrice).click();
-        waitForElement(ChoosePrice);
-        driver.findElement(ChoosePrice).click();
-        waitForElement(SubmitPrice);
-        driver.findElement(SubmitPrice).click();
+        placeAnAdPage.selectAdPrice("Free");
 
         // select a Type
-        waitForElement(SelectType);
-        driver.findElement(SelectType).click();
-        waitForElement(AdType);
-        driver.findElement(AdType).click();
+        placeAnAdPage.selectAdType(1);
 
         // write description
-        waitForElement(AdDescription);
-        driver.findElement(AdDescription).sendKeys("Free Covers for Samsung Galaxy A50");
+        placeAnAdPage.enterAdDescription("Free Covers for Samsung Galaxy A50");
 
-        // select ad location
-        waitForElement(AdLocation);
-        driver.findElement(AdLocation).click();
-        waitForElement(SearchForAdLocation);
-        driver.findElement(SearchForAdLocation).sendKeys("Giza");
-        waitForElement(SelectForAdLocation);
-        driver.findElement(SelectForAdLocation).click();
+        // enter ad location for search
+        placeAnAdPage.enterAdLocation("Giza");
 
-        // scroll down
-        AndroidElement element = (AndroidElement) driver.findElementByAndroidUIAutomator("new UiScrollable("
-                + "new UiSelector().scrollable(true)).scrollIntoView("
-                + "new UiSelector().textContains(\"Name\"));");
-        element.click();
+        // enter element text to scroll to it
+        placeAnAdPage.scrollToElement();
 
-        // enter Owner Name
-        waitForElement(OwnerName);
-        driver.findElement(OwnerName).sendKeys("Yara Magdi");
-
-        // enter Owner email
-        waitForElement(OwnerEmail);
-        driver.findElement(OwnerEmail).sendKeys("yaramagdi95@gmail.com");
+        // enter owner Info
+        placeAnAdPage.enterOwnerInfo("Yara Magdi", "yaramagdi95@gmail.com");
     }
 }
